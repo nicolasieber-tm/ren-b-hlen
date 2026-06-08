@@ -172,6 +172,7 @@
   .svc-card .price{font-size:22px;font-weight:850}
   .svc-card .price small{font-size:13px;font-weight:600;color:var(--ink-soft)}
   .svc-card .book-link{font-size:14px;font-weight:700;color:var(--energy);display:inline-flex;gap:6px;align-items:center;cursor:pointer}
+  .svc-card .svc-tag{display:inline-block;align-self:flex-start;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--green-deep);background:var(--green-soft);padding:4px 10px;border-radius:999px;margin-bottom:10px}
 
   /* Pricing row */
   .pricing{background:var(--paper-2)}
@@ -273,6 +274,13 @@
   .opt .check{position:absolute;top:12px;right:12px;width:22px;height:22px;border-radius:50%;background:var(--green);color:#fff;display:none;place-items:center}
   .opt.sel .check{display:grid}
   .opt .check svg{width:13px;height:13px}
+  .step-sublabel{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--green-deep);margin-bottom:10px}
+  .focus-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+  .focus-chip{position:relative;border:1.5px solid var(--line);border-radius:12px;padding:12px 13px;cursor:pointer;background:#fff;transition:border-color .15s,background .15s,box-shadow .15s}
+  .focus-chip:hover{border-color:var(--green);background:var(--green-soft)}
+  .focus-chip.sel{border-color:var(--green);background:var(--green-soft);box-shadow:0 0 0 3px rgba(31,122,77,.12)}
+  .focus-chip h5{font-size:14px;font-weight:800;margin-bottom:2px}
+  .focus-chip p{font-size:12px;color:var(--ink-soft);line-height:1.35}
 
   .cal{display:grid;grid-template-columns:repeat(7,1fr);gap:7px;margin-top:6px}
   .cal-h{font-size:12px;font-weight:700;color:#9aa89f;text-align:center;padding-bottom:4px;text-transform:uppercase}
@@ -555,8 +563,9 @@
 
       <div class="svc-card alt">
         <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h7l-1 8 10-12h-7z"/></svg></div>
+        <span class="svc-tag">Schwerpunkt im 1:1-Coaching</span>
         <h3>Marathon Coaching</h3>
-        <p>Für alle, die Marathon oder Halbmarathon strukturiert vorbereiten.</p>
+        <p>Für alle, die Marathon oder Halbmarathon strukturiert vorbereiten – als Schwerpunkt deines Einzelcoachings.</p>
         <ul>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>12–20 Wochen Aufbau</li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Long Run Strategie & Tempotraining</li>
@@ -564,15 +573,16 @@
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Ernährung im Training & Wettkampf</li>
         </ul>
         <div class="foot">
-          <div class="price">Auf Anfrage</div>
-          <span class="book-link" onclick="goBooking('einzel')">Anfragen →</span>
+          <div class="price">CHF 90.–<small> / 60 Min</small></div>
+          <span class="book-link" onclick="goBooking('einzel','marathon')">Buchen →</span>
         </div>
       </div>
 
       <div class="svc-card">
         <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18l5-9 4 5 3-4 6 8z"/><circle cx="7" cy="6" r="2"/></svg></div>
+        <span class="svc-tag">Schwerpunkt im 1:1-Coaching</span>
         <h3>Trail Running Coaching</h3>
-        <p>Für alle, die in den Bergen stärker werden wollen.</p>
+        <p>Für alle, die in den Bergen stärker werden wollen – als Schwerpunkt deines Einzelcoachings.</p>
         <ul>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Bergauf- & Bergabtechnik</li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Kraftausdauer</li>
@@ -580,8 +590,8 @@
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Wettkampfvorbereitung Trail</li>
         </ul>
         <div class="foot">
-          <div class="price">Auf Anfrage</div>
-          <span class="book-link" onclick="goBooking('einzel')">Anfragen →</span>
+          <div class="price">CHF 90.–<small> / 60 Min</small></div>
+          <span class="book-link" onclick="goBooking('einzel','trail')">Buchen →</span>
         </div>
       </div>
     </div>
@@ -839,10 +849,17 @@
           </div>
         </div>
 
-        <!-- STEP 2: Format / Ort -->
+        <!-- STEP 2: Schwerpunkt + Format / Ort -->
         <div class="panel" data-panel="2">
-          <h3>Wo möchtest du trainieren?</h3>
-          <p class="sub">Wähle das Format, das am besten zu dir passt.</p>
+          <h3 id="step2Title">Wo möchtest du trainieren?</h3>
+          <p class="sub" id="step2Sub">Wähle das Format, das am besten zu dir passt.</p>
+          <div id="focusWrap" style="display:none">
+            <div class="step-sublabel">Dein Schwerpunkt</div>
+            <div class="focus-row" id="focusGrid">
+              <!-- populated by JS for Lauf-Coachings -->
+            </div>
+            <div class="step-sublabel" style="margin-top:24px">Wo möchtest du trainieren?</div>
+          </div>
           <div class="opt-grid" id="formatGrid">
             <!-- populated by JS depending on service -->
           </div>
@@ -999,6 +1016,12 @@ const FORMATS = {
   ort:   {name:"Vor Ort in Bern", desc:"Persönliches Gespräch an einem Treffpunkt in Bern.", ic:'<path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>'},
   video: {name:"Per Videocall", desc:"FaceTime, Google Meet oder Microsoft Teams.", ic:'<path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/>'}
 };
+const FOCI = {
+  allg:     {name:"Allgemein & Lauftechnik", desc:"Form, Lauftechnik & allgemeine Leistungsentwicklung."},
+  marathon: {name:"Marathon & Halbmarathon", desc:"Strukturierter Aufbau, Long Runs & Renntaktik."},
+  trail:    {name:"Trail Running", desc:"Bergauf-/-abtechnik, Kraftausdauer & Höhenmeter."}
+};
+const RUNNING = ["einzel","abo","gruppe"]; // Coachings mit Trainings-Schwerpunkt
 const MONTHS = ["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"];
 const WD = ["Mo","Di","Mi","Do","Fr","Sa","So"];
 const SLOTS = {
@@ -1008,7 +1031,7 @@ const SLOTS = {
 };
 
 /* ---------- State ---------- */
-const state = {step:1, service:null, format:null, date:null, time:null, done:false};
+const state = {step:1, service:null, focus:"allg", format:null, date:null, time:null, done:false};
 let viewYear, viewMonth;
 const today = new Date(2026,5,8); // 8 June 2026 (matches current date)
 
@@ -1025,7 +1048,7 @@ function closeBooking(){
 }
 function overlayClick(e){ if(e.target.id==='bookingModal') closeBooking(); }
 function resetBooking(){
-  state.step=1; state.service=null; state.format=null; state.date=null; state.time=null; state.done=false;
+  state.step=1; state.service=null; state.focus="allg"; state.format=null; state.date=null; state.time=null; state.done=false;
   document.querySelectorAll('.opt.sel').forEach(o=>o.classList.remove('sel'));
   document.getElementById('formWrap').style.display='';
   document.getElementById('confirmWrap').style.display='none';
@@ -1034,12 +1057,13 @@ function resetBooking(){
   document.querySelectorAll('.field.err').forEach(f=>f.classList.remove('err'));
   showStep(1);
 }
-function goBooking(svc){
+function goBooking(svc,focus){
   if(state.done) resetBooking();
   openBooking();
   if(svc){
     const el = document.querySelector('.opt[data-svc="'+svc+'"]');
     if(el && state.step===1) pickService(el);
+    if(focus && FOCI[focus]) state.focus = focus; // Schwerpunkt aus Angebots-Karte übernehmen
   }
 }
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeBooking(); });
@@ -1053,12 +1077,32 @@ function pickService(el){
   document.querySelectorAll('.opt[data-svc]').forEach(o=>o.classList.remove('sel'));
   el.classList.add('sel');
   state.service = el.dataset.svc;
+  state.focus = "allg"; // Schwerpunkt zurücksetzen
   state.format = null; // reset downstream
   enableNext(true);
 }
 
-/* ---------- Step 2: format ---------- */
+/* ---------- Step 2: Schwerpunkt + format ---------- */
 function buildFormats(){
+  // Schwerpunkt – nur für Lauf-Coachings, nicht für Erstgespräch/Videocall
+  const showFocus = RUNNING.includes(state.service);
+  const wrap = document.getElementById('focusWrap');
+  wrap.style.display = showFocus ? 'block' : 'none';
+  document.getElementById('step2Title').textContent =
+    showFocus ? 'Schwerpunkt & Format' : 'Wo möchtest du trainieren?';
+  document.getElementById('step2Sub').textContent =
+    showFocus ? 'Wähle deinen Trainingsfokus und wo du trainieren möchtest.'
+              : 'Wähle das Format, das am besten zu dir passt.';
+  if(showFocus){
+    if(!state.focus || !FOCI[state.focus]) state.focus = 'allg';
+    document.getElementById('focusGrid').innerHTML = Object.entries(FOCI).map(([k,v])=>`
+      <div class="focus-chip ${state.focus===k?'sel':''}" data-focus="${k}" onclick="pickFocus(this)">
+        <h5>${v.name}</h5><p>${v.desc}</p>
+      </div>`).join('');
+  } else {
+    state.focus = null;
+  }
+
   const grid = document.getElementById('formatGrid');
   const fmts = SERVICES[state.service].formats;
   grid.innerHTML = fmts.map(f=>`
@@ -1072,6 +1116,11 @@ function buildFormats(){
     const sel = grid.querySelector('.opt[data-fmt="'+state.format+'"]');
     if(sel) sel.classList.add('sel');
   }
+}
+function pickFocus(el){
+  document.querySelectorAll('.focus-chip').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+  state.focus = el.dataset.focus; // gatet "Weiter" nicht – Standard ist bereits gewählt
 }
 function pickFormat(el){
   document.querySelectorAll('.opt[data-fmt]').forEach(o=>o.classList.remove('sel'));
@@ -1133,8 +1182,10 @@ function pickSlot(t,el){
 function buildSummary(box){
   const s = SERVICES[state.service];
   const f = FORMATS[state.format];
+  const foc = (state.focus && FOCI[state.focus]) ? FOCI[state.focus].name : null;
   box.innerHTML = `
     <div class="row"><span>Coaching</span><strong>${s.name}</strong></div>
+    ${foc?`<div class="row"><span>Schwerpunkt</span><strong>${foc}</strong></div>`:''}
     <div class="row"><span>Format</span><strong>${f?f.name:'—'}</strong></div>
     <div class="row"><span>Dauer</span><strong>${s.dur}</strong></div>
     <div class="row"><span>Datum</span><strong>${formatDate(state.date)}</strong></div>
