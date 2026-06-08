@@ -1058,12 +1058,16 @@ function resetBooking(){
   showStep(1);
 }
 function goBooking(svc,focus){
-  if(state.done) resetBooking();
   openBooking();
   if(svc){
+    // Klick auf ein konkretes Angebot startet die Buchung frisch dafuer bei Schritt 1,
+    // statt eine abgebrochene/andere Buchung fortzusetzen.
+    if(state.done || state.service!==svc || state.step!==1) resetBooking();
     const el = document.querySelector('.opt[data-svc="'+svc+'"]');
-    if(el && state.step===1) pickService(el);
+    if(el) pickService(el);
     if(focus && FOCI[focus]) state.focus = focus; // Schwerpunkt aus Angebots-Karte übernehmen
+  } else if(state.done){
+    resetBooking(); // ohne konkretes Angebot: nur nach abgeschlossener Buchung zuruecksetzen
   }
 }
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeBooking(); });
